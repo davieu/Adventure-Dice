@@ -2,27 +2,39 @@ let dice
 let diceTotal = 1;
 let innocentsKilled = 0;
 let karma = 0;
-let food = 0;
+let food = 2;
+let wholeQuestions = [];
 
 init();
 
 let gamePath = 
 {
-    path1: [1, ['The journey has begun', ['hunt for food', food + 1], 'slap your mother', 'do pushups and gain strength']],
-    path2: [2, ['nothing dangerous here', ['hunt for food', food + 1], 'kick homeless man', 'work for money']],
-    path3: [3, ['you notice a kid begging for food', ['give him food', food - 1], 'let him starve', 'kill him']], 
-    path4: [4, ['you notice a kid begging for food', ['give him food', food - 1], 'let him starve', 'kill him']],
-    path5: [5, ['you notice a kid begging for food', ['give him food', food - 1], 'let him starve', 'kill him']],
-    path6: [6, ['nothing dangerous here', ['hunt for food', food + 1], 'kick homeless man', 'work for money']],
-    path7: [7, ['nothing dangerous here', ['hunt for food', food + 1], 'kick homeless man', 'work for money']],
-    path8: [8, ['nothing dangerous here', ['hunt for food', food + 1], 'kick homeless man', 'work for money']],
-    path9: [9, ['you notice a kid begging for food', ['give him food', food - 1], 'let him starve', 'kill him']],
-    path10: [10, ['nothing dangerous here', ['hunt for food', food + 1], 'kick homeless man', 'work for money']]
+    path1: [1, ['The journey has begun', 'hunt for food', 'slap your mother', 'do pushups and gain strength']], 
+    path2: [2, ['nothing dangerous here', 'hunt for food', 'kick homeless man', 'work for money']],
+    path3: [3, ['you notice a kid begging for food', 'give him food', 'let him starve', 'kill him']], 
+    path4: [4, ['you notice a kid begging for food', 'give him food', 'let him starve', 'kill him']],
+    path5: [5, ['you notice a kid begging for food', 'give him food', 'let him starve', 'kill him']],
+    path6: [6, ['nothing dangerous here', 'hunt for food', 'kick homeless man', 'work for money']],
+    path7: [7, ['nothing dangerous here', 'hunt for food', 'kick homeless man', 'work for money']],
+    path8: [8, ['nothing dangerous here', 'hunt for food', 'kick homeless man', 'work for money']],
+    path9: [9, ['you notice a kid begging for food', 'give him food', 'let him starve', 'kill him']],
+    path10: [10, ['nothing dangerous here', 'give him food', 'kick homeless man', 'work for money']],
+    path11: [11, ['nothing dangerous here', 'give him food', 'kick homeless man', 'work for money']],
 
 }
 
-console.log(gamePath)
-console.log('dice total: ' + diceTotal)
+let gamePath2 = 
+{
+    center: [],
+    north: [],
+    west: [],
+    east: [],
+    south: [] 
+}
+
+
+console.log(gamePath);
+console.log('dice total: ' + diceTotal);
 
 //array data structure************* NOT USED
 // let gamePath = []
@@ -54,12 +66,38 @@ document.querySelector('.btn-roll').addEventListener('click', () => {
     gamePic.src = 'img/dice-' + gamePath['path' + diceTotal][0] + '.png'
 
     //testing/targeting gamepath object
-    let target = gamePath['path' + diceTotal]
-    console.log('target object:', target);
+    var targetAnswers = gamePath['path' + diceTotal][1]
     
+    wholeQuestions = targetAnswers
+
+    console.log(targetAnswers)
+
+    for (var i = 0; i < targetAnswers.length; i++) {
+        if (targetAnswers[i] !== targetAnswers[0]) {
+            var btn = document.createElement("button");
+            var t = document.createTextNode(targetAnswers[i]);
+            btn.appendChild(t);
+            document.querySelector('.questions').appendChild(btn);
+        }
+    }
 })
 
+console.log(wholeQuestions);
+
 document.querySelector('.btn-reset').addEventListener('click', init);
+
+// var poop =['LEXUS','AUDI','MAYBACK','FERRARI','TOYOTA'];   
+// function printBtn() {
+// for (var i = 0; i < target.length; i++) {
+
+//         var btn = document.createElement("button");
+//         var t = document.createTextNode(target[i]);
+//         btn.appendChild(t);
+//         document.body.appendChild(btn);
+//     }
+// }
+
+// window.onload = printBtn();
 
 function init() {
     dice
