@@ -4,6 +4,8 @@ let innocentsKilled = 0;
 let karma = 0;
 let food = 2;
 let wholeQuestions = [];
+var btnAnswers = document.querySelectorAll('.answers');
+var btnArrays = Array.from(btnAnswers);
 
 init();
 
@@ -68,44 +70,40 @@ document.querySelector('.btn-roll').addEventListener('click', () => {
     //testing/targeting gamepath object
     var targetAnswers = gamePath['path' + diceTotal][1]
     
+    //making the targetAnswers equal to a global current questions array.
     wholeQuestions = targetAnswers
 
-    console.log(targetAnswers)
+    console.log('targetAnswers:', targetAnswers)
+    console.log('wholequestions:', wholeQuestions);
 
-    for (var i = 0; i < targetAnswers.length; i++) {
-        if (targetAnswers[i] !== targetAnswers[0]) {
-            var btn = document.createElement("button");
-            var t = document.createTextNode(targetAnswers[i]);
-            btn.appendChild(t);
-            document.querySelector('.questions').appendChild(btn);
-        }
+    document.querySelector('.question-asked').textContent = wholeQuestions[0]
+
+    console.log(btnArrays.length)
+
+    //changes the answers on each dice roll in the DOM
+    for (var i = 0; i < btnArrays.length; i++) {
+
+        btnArrays[i].textContent = wholeQuestions[i + 1];
+
     }
 })
 
-console.log(wholeQuestions);
-
 document.querySelector('.btn-reset').addEventListener('click', init);
 
-// var poop =['LEXUS','AUDI','MAYBACK','FERRARI','TOYOTA'];   
-// function printBtn() {
-// for (var i = 0; i < target.length; i++) {
-
-//         var btn = document.createElement("button");
-//         var t = document.createTextNode(target[i]);
-//         btn.appendChild(t);
-//         document.body.appendChild(btn);
-//     }
-// }
-
-// window.onload = printBtn();
-
 function init() {
-    dice
+    dice = 0
     diceTotal = 1;
     innocentsKilled = 0;
     karma = 0;
     food = 0;
+    console.log(wholeQuestions)
+    wholeQuestions = [];
+    document.querySelector('.dice-output').textContent = 'Dice Roll:';
+    document.querySelector('.dice-total').textContent = `Dice Total: ${diceTotal}`;
+    document.querySelector('.question-asked').textContent = ""
+    btnArrays.forEach(cur => cur.textContent = "")
     console.log('init dice total: ' + diceTotal);
+    console.log(wholeQuestions)
     
 
     document.querySelector('.dice').style.display = 'none';
