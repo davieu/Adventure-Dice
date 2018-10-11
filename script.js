@@ -10,6 +10,8 @@ let wholeQuestionReplies = [];
 let btnArray = document.querySelectorAll('.replies');
 let btnReplies = Array.from(btnArray);
 
+console.log(btnReplies)
+
 var DOMstrings = {
     btnRollDOM: '.btn-roll',
     diceOutputDOM: '.dice-output',
@@ -85,6 +87,12 @@ document.querySelector(DOMstrings.btnRollDOM).addEventListener('click', () => {
             btnReplies[i].textContent = wholeQuestionReplies[i + 1];
         };
     };
+});
+// console.log(document.getElementById('reply-div').hasChildNodes())
+
+document.getElementById('reply-div').addEventListener('click', (e) => {
+        console.log(e.target)
+
 });
 
 document.querySelector('.btn-reset').addEventListener('click', init);
