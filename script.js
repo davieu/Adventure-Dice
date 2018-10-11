@@ -1,13 +1,14 @@
-let dice
+let dice, gameOver
 let diceTotal = 1;
 let innocentsKilled = 0;
 let karma = 0;
 let food = 2;
 
 //this is a global array so that current question can be pushed into it
-let wholeQuestions = [];
-let btnArray = document.querySelectorAll('.answers');
-let btnAnswers = Array.from(btnArray);
+let wholeQuestionReplies = [];
+//these are the buttons for the replies in the DOM.
+let btnArray = document.querySelectorAll('.replies');
+let btnReplies = Array.from(btnArray);
 
 var DOMstrings = {
     btnRollDOM: '.btn-roll',
@@ -16,8 +17,10 @@ var DOMstrings = {
     diceDOM: '.dice',
     gamePathDOM: '.gamepath',
     questionAskedDOM: '.question-asked', 
-    btnAnswersDOM: '.answers'
+    btnRepliesDOM: '.replies'
 }
+
+
 
 let gamePath = 
 {
@@ -34,97 +37,80 @@ let gamePath =
     path11: [11, ['11. nothing dangerous here', 'give him food', 'kick homeless man', 'work for money']],
 }
 
-init();
+var gamePathSize = Object.keys(gamePath).length;
+console.log(gamePathSize);
 
 console.log('gamePath: ', gamePath);
 
-//these are the initial questions and answers printed to DOM
-document.querySelector(DOMstrings.questionAskedDOM).textContent = gamePath.path1[1][0]
-//these are the 3 replies for the first question. 
-for (let i = 0; i < btnAnswers.length; i++) {
-    btnAnswers[i].textContent = gamePath.path1[1][i + 1];
-}
+init()
 
 //targets the dice-roll button. When clicked random dice rolls and targets gamepath
+
 document.querySelector(DOMstrings.btnRollDOM).addEventListener('click', () => {
-    //random dice and change the dom
-    dice = Math.floor(Math.random() * 5) + 1;
-    document.querySelector(DOMstrings.diceOutputDOM).textContent = `Dice Roll: ${dice}`;
+    if (diceTotal < gamePathSize) {
+        //random dice and change the dom
+        dice = Math.floor(Math.random() * 5) + 1;
+        document.querySelector(DOMstrings.diceOutputDOM).textContent = `Dice Roll: ${dice}`;
+        console.log(dice)
+        //target gamepath to manipulate data and to know which gamepath you are on.
+        diceTotal += dice
+        if (diceTotal > gamePathSize) {
+            diceTotal = gamePathSize
+        }
 
-    //target gamepath to manipulate data and to know which gamepath you are on.
-    diceTotal += dice
-    document.querySelector(DOMstrings.diceTotalDOM).textContent = `Dice Total/GamePath: ${diceTotal}`;
-
-    //deals with images  with type coercion
-    let diceImg = document.querySelector(DOMstrings.diceDOM);
-    diceImg.style.display = 'block';
-    diceImg.src = `img/dice-${dice}.png`
-
-    let gamePic = document.querySelector(DOMstrings.gamePathDOM);
-    gamePic.style.display = 'block'
-    gamePic.src = 'img/dice-' + gamePath['path' + diceTotal][0] + '.png'
-
-    //testing/targeting gamepath object
-    let targetAnswers = gamePath['path' + diceTotal][1]
+        document.querySelector(DOMstrings.diceTotalDOM).textContent = `Dice Total/GamePath: ${diceTotal}`;
     
-    //making the targetAnswers equal to a global current questions array.
-    wholeQuestions = targetAnswers
+        //deals with images  with type coercion
+        let diceImg = document.querySelector(DOMstrings.diceDOM);
+        diceImg.style.display = 'block';
+        diceImg.src = `img/dice-${dice}.png`;
+    
+        let gamePic = document.querySelector(DOMstrings.gamePathDOM);
+        gamePic.style.display = 'block'
+        gamePic.src = 'img/dice-' + gamePath['path' + diceTotal][0] + '.png'
+    
+        //testing/targeting gamepath object
+        let targetReplies = gamePath['path' + diceTotal][1];
+        
+        //making the targetReplies equal to a global current questions array.
+        wholeQuestionReplies = targetReplies;
+    
+        //puts the question asked in the DOM
+        document.querySelector(DOMstrings.questionAskedDOM).textContent = wholeQuestionReplies[0];
+    
+        //changes the Replies on each dice roll in the DOM
+        for (let i = 0; i < btnReplies.length; i++) {
+            btnReplies[i].textContent = wholeQuestionReplies[i + 1];
+        };
+    };
 
-    //puts the question asked in the DOM
-    document.querySelector(DOMstrings.questionAskedDOM).textContent = wholeQuestions[0]
+});
 
-    //changes the answers on each dice roll in the DOM
-    for (let i = 0; i < btnAnswers.length; i++) {
+////////////////////////////////////////
+// if (diceTotal > game) {
 
-        btnAnswers[i].textContent = wholeQuestions[i + 1];
-    }
-})
-
+// }
 
 document.querySelector('.btn-reset').addEventListener('click', init);
 
-
 //resets game completely
 function init() {
-    dice = 1
+    dice = 1;
     diceTotal = 1;
     innocentsKilled = 0;
     karma = 0;
     food = 0;
 
-    wholeQuestions = [];
+    wholeQuestionReplies = [];
     document.querySelector(DOMstrings.diceOutputDOM).textContent = 'Dice Roll:';
     document.querySelector(DOMstrings.diceTotalDOM).textContent = `Dice Total/GamePath: ${diceTotal}`;
 
     //resets the question and reply to the first
-    document.querySelector(DOMstrings.questionAskedDOM).textContent = gamePath.path1[1][0]
-    for (let i = 0; i < btnAnswers.length; i++) {
-        btnAnswers[i].textContent = gamePath.path1[1][i + 1];
-    }
+    document.querySelector(DOMstrings.questionAskedDOM).textContent = gamePath.path1[1][0];
+    for (let i = 0; i < btnReplies.length; i++) {
+        btnReplies[i].textContent = gamePath.path1[1][i + 1];
+    };
 
     document.querySelector(DOMstrings.diceDOM).style.display = 'none';
     document.querySelector(DOMstrings.gamePathDOM).style.display = 'none';
-}
-
-
-//   var dataController = (function(){
-    
-
-// })();
-
-
-
-// var uiController = (function(){
-
-
-// })();
-
-
-
-// var appController = (function(dataCtrl, uiCtrl){
-
-
-
-// })(dataController, uiController);
-
-// appController.init();
+};
