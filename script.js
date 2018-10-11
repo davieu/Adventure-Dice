@@ -49,10 +49,11 @@ init()
 document.querySelector(DOMstrings.btnRollDOM).addEventListener('click', () => {
     if (diceTotal < gamePathSize) {
         //random dice and change the dom
-        dice = Math.floor(Math.random() * 5) + 1;
+        dice = Math.floor(Math.random() * 3) + 1;
         document.querySelector(DOMstrings.diceOutputDOM).textContent = `Dice Roll: ${dice}`;
         console.log(dice)
-        //target gamepath to manipulate data and to know which gamepath you are on.
+        
+        //dicetotal will indicate which gamepath in the array you are at/question asked.
         diceTotal += dice
         if (diceTotal > gamePathSize) {
             diceTotal = gamePathSize
@@ -60,15 +61,16 @@ document.querySelector(DOMstrings.btnRollDOM).addEventListener('click', () => {
 
         document.querySelector(DOMstrings.diceTotalDOM).textContent = `Dice Total/GamePath: ${diceTotal}`;
     
-        //deals with images  with type coercion
+        //deals with dice images using type coercion- based on diceTotal
         let diceImg = document.querySelector(DOMstrings.diceDOM);
         diceImg.style.display = 'block';
         diceImg.src = `img/dice-${dice}.png`;
     
+        //deals with background images using type coercion- based on diceTotal
         let gamePic = document.querySelector(DOMstrings.gamePathDOM);
         gamePic.style.display = 'block'
-        gamePic.src = 'img/dice-' + gamePath['path' + diceTotal][0] + '.png'
-    
+        gamePic.src = 'gamePics/gamePic-' + gamePath['path' + diceTotal][0] + '.png'
+
         //testing/targeting gamepath object
         let targetReplies = gamePath['path' + diceTotal][1];
         
@@ -78,18 +80,12 @@ document.querySelector(DOMstrings.btnRollDOM).addEventListener('click', () => {
         //puts the question asked in the DOM
         document.querySelector(DOMstrings.questionAskedDOM).textContent = wholeQuestionReplies[0];
     
-        //changes the Replies on each dice roll in the DOM
+        //changes the Replies based on the global  current wholeQuestionReplies array
         for (let i = 0; i < btnReplies.length; i++) {
             btnReplies[i].textContent = wholeQuestionReplies[i + 1];
         };
     };
-
 });
-
-////////////////////////////////////////
-// if (diceTotal > game) {
-
-// }
 
 document.querySelector('.btn-reset').addEventListener('click', init);
 
@@ -111,6 +107,9 @@ function init() {
         btnReplies[i].textContent = gamePath.path1[1][i + 1];
     };
 
+    let gamePic = document.querySelector(DOMstrings.gamePathDOM);
+    gamePic.style.display = 'block'
+    gamePic.src = 'gamePics/gamePic-' + gamePath['path' + diceTotal][0] + '.png'
+
     document.querySelector(DOMstrings.diceDOM).style.display = 'none';
-    document.querySelector(DOMstrings.gamePathDOM).style.display = 'none';
 };
