@@ -4,11 +4,20 @@ let innocentsKilled = 0;
 let karma = 0;
 let food = 2;
 
+//this is a global array so that current question can be pushed into it
 let wholeQuestions = [];
-let btnAnswers = document.querySelectorAll('.answers');
-let btnArrays = Array.from(btnAnswers);
+let btnArray = document.querySelectorAll('.answers');
+let btnAnswers = Array.from(btnArray);
 
-init();
+var DOMstrings = {
+    btnRollDOM: '.btn-roll',
+    diceOutputDOM: '.dice-output',
+    diceTotalDOM: '.dice-total',
+    diceDOM: '.dice',
+    gamePathDOM: '.gamepath',
+    questionAskedDOM: '.question-asked', 
+    btnAnswersDOM: '.answers'
+}
 
 let gamePath = 
 {
@@ -25,30 +34,33 @@ let gamePath =
     path11: [11, ['11. nothing dangerous here', 'give him food', 'kick homeless man', 'work for money']],
 }
 
+init();
+
 console.log('gamePath: ', gamePath);
 
-document.querySelector('.question-asked').textContent = gamePath.path1[1][0]
-for (let i = 0; i < btnArrays.length; i++) {
-
-    btnArrays[i].textContent = gamePath.path1[1][i + 1];
+//these are the initial questions and answers printed to DOM
+document.querySelector(DOMstrings.questionAskedDOM).textContent = gamePath.path1[1][0]
+//these are the 3 replies for the first question. 
+for (let i = 0; i < btnAnswers.length; i++) {
+    btnAnswers[i].textContent = gamePath.path1[1][i + 1];
 }
 
-
 //targets the dice-roll button. When clicked random dice rolls and targets gamepath
-document.querySelector('.btn-roll').addEventListener('click', () => {
+document.querySelector(DOMstrings.btnRollDOM).addEventListener('click', () => {
     //random dice and change the dom
     dice = Math.floor(Math.random() * 5) + 1;
-    document.querySelector('.dice-output').textContent = `Dice Roll: ${dice}`;
+    document.querySelector(DOMstrings.diceOutputDOM).textContent = `Dice Roll: ${dice}`;
 
     //target gamepath to manipulate data and to know which gamepath you are on.
     diceTotal += dice
-    document.querySelector('.dice-total').textContent = `Dice Total/GamePath: ${diceTotal}`;
+    document.querySelector(DOMstrings.diceTotalDOM).textContent = `Dice Total/GamePath: ${diceTotal}`;
 
-    let diceImg = document.querySelector('.dice');
+    //deals with images  with type coercion
+    let diceImg = document.querySelector(DOMstrings.diceDOM);
     diceImg.style.display = 'block';
     diceImg.src = `img/dice-${dice}.png`
 
-    let gamePic = document.querySelector('.gamepath');
+    let gamePic = document.querySelector(DOMstrings.gamePathDOM);
     gamePic.style.display = 'block'
     gamePic.src = 'img/dice-' + gamePath['path' + diceTotal][0] + '.png'
 
@@ -59,12 +71,12 @@ document.querySelector('.btn-roll').addEventListener('click', () => {
     wholeQuestions = targetAnswers
 
     //puts the question asked in the DOM
-    document.querySelector('.question-asked').textContent = wholeQuestions[0]
+    document.querySelector(DOMstrings.questionAskedDOM).textContent = wholeQuestions[0]
 
     //changes the answers on each dice roll in the DOM
-    for (let i = 0; i < btnArrays.length; i++) {
+    for (let i = 0; i < btnAnswers.length; i++) {
 
-        btnArrays[i].textContent = wholeQuestions[i + 1];
+        btnAnswers[i].textContent = wholeQuestions[i + 1];
     }
 })
 
@@ -81,11 +93,38 @@ function init() {
     food = 0;
 
     wholeQuestions = [];
-    document.querySelector('.dice-output').textContent = 'Dice Roll:';
-    document.querySelector('.dice-total').textContent = `Dice Total/GamePath: ${diceTotal}`;
-    document.querySelector('.question-asked').textContent = ""
-    btnArrays.forEach(cur => cur.textContent = "")
+    document.querySelector(DOMstrings.diceOutputDOM).textContent = 'Dice Roll:';
+    document.querySelector(DOMstrings.diceTotalDOM).textContent = `Dice Total/GamePath: ${diceTotal}`;
 
-    document.querySelector('.dice').style.display = 'none';
-    document.querySelector('.gamepath').style.display = 'none';
+    //resets the question and reply to the first
+    document.querySelector(DOMstrings.questionAskedDOM).textContent = gamePath.path1[1][0]
+    for (let i = 0; i < btnAnswers.length; i++) {
+        btnAnswers[i].textContent = gamePath.path1[1][i + 1];
+    }
+
+    document.querySelector(DOMstrings.diceDOM).style.display = 'none';
+    document.querySelector(DOMstrings.gamePathDOM).style.display = 'none';
 }
+
+
+//   var dataController = (function(){
+    
+
+// })();
+
+
+
+// var uiController = (function(){
+
+
+// })();
+
+
+
+// var appController = (function(dataCtrl, uiCtrl){
+
+
+
+// })(dataController, uiController);
+
+// appController.init();
