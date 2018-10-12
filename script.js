@@ -1,4 +1,5 @@
-let dice, gameOver, yourReply;
+let dice, gameOver
+let yourReply = [];
 let diceTotal = 1;
 let innocentsKilled = 0;
 let karma = 0;
@@ -90,31 +91,41 @@ document.querySelector(DOMstrings.btnRollDOM).addEventListener('click', () => {
     };
 });
 
-
+//This was by far the trickiest to get to work. Basically a focus for the target reply chosen.
 document.getElementById('reply-div').addEventListener('click', (e) => {
-    yourReply = []
+
+    var yo = btnReplies.map(cur => {
+        return cur
+    })
+    console.log(yo)
+
+    // if (e.target !==  yo) {
+    //     yourReply = []
+    // } else {
+
+    // }
+
+
+
+    if (e.target !==  yo) {
+        yourReply = []
+    }
     yourReply[0] = e.target
 
-    console.log(yourReply);
+    yourReply[0].style.color = 'red'
+
+    var yo = btnReplies.map(cur => {
+        return cur
+    })
+
+    
+
+    btnReplies.forEach(cur => {
+        if (yourReply[0] !== cur) {cur.style.color = 'black'}
+    })
+    console.log(e.target)
     console.log(yourReply[0])
-    console.log(document.querySelectorAll('.replies')[0]);
-    // document.querySelectorAll('.replies').style.color = 'red'
-    
-    // if (e.target.style.color === "#555") {
-    //     e.target.style.color = 'red'
-    // }
 
-    
-
-    // let red = yourReply[0].style.backgroundColor = 'red'
-    // if (red) {
-
-    // }
-
-    // if (document.querySelectorAll('.replies') === yourReply[0]) {
-    //     console.log('sameeee')
-    // }
-    // if (e.target.textContent)
 });
 
 
@@ -140,7 +151,7 @@ function init() {
     innocentsKilled = 0;
     karma = 0;
     food = 0;
-    yourReply = ''
+    yourReply = []
 
     wholeQuestionReplies = [];
     document.querySelector(DOMstrings.diceOutputDOM).textContent = 'Dice Roll:';
