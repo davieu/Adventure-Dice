@@ -13,7 +13,7 @@ let btnReplies = Array.from(btnArray);
 
 console.log(btnReplies)
 
-var DOMstrings = {
+let DOMstrings = {
     btnRollDOM: '.btn-roll',
     btnReset: '.btn-reset',
     btnNexTDOM: 'btn-next',
@@ -24,6 +24,13 @@ var DOMstrings = {
     questionAskedDOM: '.question-asked', 
     btnRepliesDOM: '.replies',
 }
+
+let DOMcolors = {
+    targetColor: 'red',
+    defaultColor: '#555'
+}
+
+
 
 
 
@@ -87,6 +94,9 @@ document.querySelector(DOMstrings.btnRollDOM).addEventListener('click', () => {
         //changes the Replies based on the global  current wholeQuestionReplies array
         for (let i = 0; i < btnReplies.length; i++) {
             btnReplies[i].textContent = wholeQuestionReplies[i + 1];
+
+        yourReply = [];
+        btnReplies.forEach(cur => cur.style.color = DOMcolors.defaultColor)
         };
     };
 });
@@ -94,38 +104,14 @@ document.querySelector(DOMstrings.btnRollDOM).addEventListener('click', () => {
 //This was by far the trickiest to get to work. Basically a focus for the target reply chosen.
 document.getElementById('reply-div').addEventListener('click', (e) => {
 
-    var yo = btnReplies.map(cur => {
-        return cur
-    })
-    console.log(yo)
+    if (e.target !== document.getElementById('reply-div')) {
 
-    // if (e.target !==  yo) {
-    //     yourReply = []
-    // } else {
-
-    // }
-
-
-
-    if (e.target !==  yo) {
-        yourReply = []
+        yourReply[0] = e.target
+        yourReply[0].style.color = DOMcolors.targetColor
+        btnReplies.forEach(cur => {
+            if (yourReply[0] !== cur) {cur.style.color = DOMcolors.defaultColor}
+        })
     }
-    yourReply[0] = e.target
-
-    yourReply[0].style.color = 'red'
-
-    var yo = btnReplies.map(cur => {
-        return cur
-    })
-
-    
-
-    btnReplies.forEach(cur => {
-        if (yourReply[0] !== cur) {cur.style.color = 'black'}
-    })
-    console.log(e.target)
-    console.log(yourReply[0])
-
 });
 
 
@@ -168,4 +154,5 @@ function init() {
     gamePic.src = 'gamePics/gamePic-' + gamePath['path' + diceTotal][0] + '.png'
 
     document.querySelector(DOMstrings.diceDOM).style.display = 'none';
+    btnReplies.forEach(cur => cur.style.color = DOMcolors.defaultColor)
 };
