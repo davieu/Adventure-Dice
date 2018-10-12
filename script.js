@@ -1,4 +1,4 @@
-let dice, gameOver
+let dice, gameOver, yourReply;
 let diceTotal = 1;
 let innocentsKilled = 0;
 let karma = 0;
@@ -14,12 +14,14 @@ console.log(btnReplies)
 
 var DOMstrings = {
     btnRollDOM: '.btn-roll',
+    btnReset: '.btn-reset',
+    btnNexTDOM: 'btn-next',
     diceOutputDOM: '.dice-output',
     diceTotalDOM: '.dice-total',
     diceDOM: '.dice',
     gamePathDOM: '.gamepath',
     questionAskedDOM: '.question-asked', 
-    btnRepliesDOM: '.replies'
+    btnRepliesDOM: '.replies',
 }
 
 
@@ -47,7 +49,6 @@ console.log('gamePath: ', gamePath);
 init()
 
 //targets the dice-roll button. When clicked random dice rolls and targets gamepath
-
 document.querySelector(DOMstrings.btnRollDOM).addEventListener('click', () => {
     if (diceTotal < gamePathSize) {
         //random dice and change the dom
@@ -88,14 +89,49 @@ document.querySelector(DOMstrings.btnRollDOM).addEventListener('click', () => {
         };
     };
 });
-// console.log(document.getElementById('reply-div').hasChildNodes())
+
 
 document.getElementById('reply-div').addEventListener('click', (e) => {
-        console.log(e.target)
+    yourReply = []
+    yourReply[0] = e.target
 
+    console.log(yourReply);
+    console.log(yourReply[0])
+    console.log(document.querySelectorAll('.replies')[0]);
+    // document.querySelectorAll('.replies').style.color = 'red'
+    
+    // if (e.target.style.color === "#555") {
+    //     e.target.style.color = 'red'
+    // }
+
+    
+
+    // let red = yourReply[0].style.backgroundColor = 'red'
+    // if (red) {
+
+    // }
+
+    // if (document.querySelectorAll('.replies') === yourReply[0]) {
+    //     console.log('sameeee')
+    // }
+    // if (e.target.textContent)
 });
 
-document.querySelector('.btn-reset').addEventListener('click', init);
+
+
+var span = document.querySelector("span");
+// var classes = span.classList;
+span.onclick = function() {
+  var result = span.classList.toggle("j");
+  if(result) {
+    span.textContent = "'c' added; classList is now '" + span.classList + "'.";
+  } else {
+    span.textContent = "'c' removed; classList is now '" + span.classList + "'.";
+  }
+}
+
+
+document.querySelector(DOMstrings.btnReset).addEventListener('click', init);
 
 //resets game completely
 function init() {
@@ -104,6 +140,7 @@ function init() {
     innocentsKilled = 0;
     karma = 0;
     food = 0;
+    yourReply = ''
 
     wholeQuestionReplies = [];
     document.querySelector(DOMstrings.diceOutputDOM).textContent = 'Dice Roll:';
