@@ -95,6 +95,7 @@ document.querySelector(DOMstrings.btnRollDOM).addEventListener('click', () => {
         for (let i = 0; i < btnReplies.length; i++) {
             btnReplies[i].textContent = wholeQuestionReplies[i + 1];
 
+        //resets the target and reply picked
         yourReply = [];
         btnReplies.forEach(cur => cur.style.color = DOMcolors.defaultColor)
         };
@@ -115,20 +116,9 @@ document.getElementById('reply-div').addEventListener('click', (e) => {
 });
 
 
-
-var span = document.querySelector("span");
-// var classes = span.classList;
-span.onclick = function() {
-  var result = span.classList.toggle("j");
-  if(result) {
-    span.textContent = "'c' added; classList is now '" + span.classList + "'.";
-  } else {
-    span.textContent = "'c' removed; classList is now '" + span.classList + "'.";
-  }
-}
-
-
+//callsback the init/reset function
 document.querySelector(DOMstrings.btnReset).addEventListener('click', init);
+
 
 //resets game completely
 function init() {
