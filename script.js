@@ -7,32 +7,28 @@ let food = 2;
 
 //this is a global array so that current question can be pushed into it
 let wholeQuestionReplies = [];
+
 //these are the buttons for the replies in the DOM.
 let btnArray = document.querySelectorAll('.replies');
 let btnReplies = Array.from(btnArray);
 
-console.log(btnReplies)
-
 let DOMstrings = {
     btnRollDOM: '.btn-roll',
     btnReset: '.btn-reset',
-    btnNexTDOM: 'btn-next',
+    btnRepliesDOM: '.replies',
+    btnNexTDOM: '.btn-next',
     diceOutputDOM: '.dice-output',
     diceTotalDOM: '.dice-total',
     diceDOM: '.dice',
     gamePathDOM: '.gamepath',
     questionAskedDOM: '.question-asked', 
-    btnRepliesDOM: '.replies',
+    IDreplyDivDOM: 'reply-div'
 }
 
 let DOMcolors = {
     targetColor: 'red',
     defaultColor: '#555'
 }
-
-
-
-
 
 let gamePath = 
 {
@@ -49,6 +45,7 @@ let gamePath =
     path11: [11, ['11. nothing dangerous here', 'give him food', 'kick homeless man', 'work for money']],
 }
 
+
 var gamePathSize = Object.keys(gamePath).length;
 console.log(gamePathSize);
 
@@ -58,7 +55,7 @@ init()
 
 //targets the dice-roll button. When clicked random dice rolls and targets gamepath
 document.querySelector(DOMstrings.btnRollDOM).addEventListener('click', () => {
-    if (diceTotal < gamePathSize) {
+    if (diceTotal < gamePathSize && yourReply.length > 0) {
         //random dice and change the dom
         dice = Math.floor(Math.random() * 3) + 1;
         document.querySelector(DOMstrings.diceOutputDOM).textContent = `Dice Roll: ${dice}`;
@@ -85,8 +82,8 @@ document.querySelector(DOMstrings.btnRollDOM).addEventListener('click', () => {
         //testing/targeting gamepath object
         let targetReplies = gamePath['path' + diceTotal][1];
         
-        //making the targetReplies equal to a global current questions array.
-        wholeQuestionReplies = targetReplies;
+        //targeting gamepath object so that it is equal to a global current questions array.
+        wholeQuestionReplies = gamePath['path' + diceTotal][1];
     
         //puts the question asked in the DOM
         document.querySelector(DOMstrings.questionAskedDOM).textContent = wholeQuestionReplies[0];
@@ -94,18 +91,18 @@ document.querySelector(DOMstrings.btnRollDOM).addEventListener('click', () => {
         //changes the Replies based on the global  current wholeQuestionReplies array
         for (let i = 0; i < btnReplies.length; i++) {
             btnReplies[i].textContent = wholeQuestionReplies[i + 1];
-
+        };
+        
         //resets the target and reply picked
         yourReply = [];
         btnReplies.forEach(cur => cur.style.color = DOMcolors.defaultColor)
-        };
     };
 });
 
 //This was by far the trickiest to get to work. Basically a focus for the target reply chosen.
-document.getElementById('reply-div').addEventListener('click', (e) => {
+document.getElementById(DOMstrings.IDreplyDivDOM).addEventListener('click', (e) => {
 
-    if (e.target !== document.getElementById('reply-div')) {
+    if (e.target !== document.getElementById(DOMstrings.IDreplyDivDOM)) {
 
         yourReply[0] = e.target
         yourReply[0].style.color = DOMcolors.targetColor
@@ -114,6 +111,12 @@ document.getElementById('reply-div').addEventListener('click', (e) => {
         })
     }
 });
+
+//function that when btn next is clicked it moves to next questions. 
+//Figure out which array index was chosen as reply to specific portait image
+document.querySelector(DOMstrings.btnNexTDOM).addEventListener('click', () => {
+    console.log(wholeQuestionReplies)
+})
 
 
 //callsback the init/reset function
@@ -129,12 +132,15 @@ function init() {
     food = 0;
     yourReply = []
 
-    wholeQuestionReplies = [];
     document.querySelector(DOMstrings.diceOutputDOM).textContent = 'Dice Roll:';
     document.querySelector(DOMstrings.diceTotalDOM).textContent = `Dice Total/GamePath: ${diceTotal}`;
 
-    //resets the question and reply to the first
+    //make the wholeQuestionReplies array equal to the current question/answers
+    wholeQuestionReplies = gamePath['path' + diceTotal][1];
+
+    //resets the question to gamepath 1
     document.querySelector(DOMstrings.questionAskedDOM).textContent = gamePath.path1[1][0];
+    //resets the replies to gamepath 1
     for (let i = 0; i < btnReplies.length; i++) {
         btnReplies[i].textContent = gamePath.path1[1][i + 1];
     };
