@@ -78,9 +78,6 @@ document.querySelector(DOMstrings.btnRollDOM).addEventListener('click', () => {
         let gamePic = document.querySelector(DOMstrings.gamePathDOM);
         gamePic.style.display = 'block'
         gamePic.src = 'gamePics/gamePic-' + gamePath['path' + diceTotal][0] + '.png'
-
-        //testing/targeting gamepath object
-        let targetReplies = gamePath['path' + diceTotal][1];
         
         //targeting gamepath object so that it is equal to a global current questions array.
         wholeQuestionReplies = gamePath['path' + diceTotal][1];
@@ -114,6 +111,7 @@ document.getElementById(DOMstrings.IDreplyDivDOM).addEventListener('click', (e) 
 
 //function that when btn next is clicked it moves to next questions. 
 //Figure out which array index was chosen as reply to specific portait image
+//make dice total the data
 document.querySelector(DOMstrings.btnNexTDOM).addEventListener('click', () => {
     console.log(wholeQuestionReplies)
 })
