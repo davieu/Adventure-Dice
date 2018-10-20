@@ -1,4 +1,4 @@
-let dice, gameOver
+let dice, gameOver, selectedReplyButtonIndex
 let yourReply = [];
 let diceTotal = 1;
 let innocentsKilled = 0;
@@ -11,6 +11,7 @@ let wholeQuestionReplies = [];
 //these are the buttons for the replies in the DOM.
 let btnArray = document.querySelectorAll('.replies');
 let btnReplies = Array.from(btnArray);
+let yo = [] 
 
 let DOMstrings = {
     btnRollDOM: '.btn-roll',
@@ -43,6 +44,20 @@ let gamePath =
     path9: [9, ['9. you notice a kid begging for food', 'give him food', 'let him starve', 'kill him']],
     path10: [10, ['10. nothing dangerous here', 'give him food', 'kick homeless man', 'work for money']],
     path11: [11, ['11. nothing dangerous here', 'give him food', 'kick homeless man', 'work for money']],
+}
+
+let gameReplies = 
+{
+    replies1: [],
+    replies2: [],
+    replies3: [],
+    replies4: [],
+    replies6: [],
+    replies7: [],
+    replies8: [],
+    replies9: [],
+    replies10: [],
+    replies11: []
 }
 
 
@@ -90,6 +105,7 @@ document.querySelector(DOMstrings.btnRollDOM).addEventListener('click', () => {
             btnReplies[i].textContent = wholeQuestionReplies[i + 1];
         };
         
+        
         //resets the target and reply picked
         yourReply = [];
         btnReplies.forEach(cur => cur.style.color = DOMcolors.defaultColor)
@@ -101,18 +117,25 @@ document.getElementById(DOMstrings.IDreplyDivDOM).addEventListener('click', (e) 
 
     if (e.target !== document.getElementById(DOMstrings.IDreplyDivDOM)) {
 
+        //sent to a global variable where I can acquire the index of the selected DOM reply button
+        selectedReplyButtonIndex = btnReplies.indexOf(e.target)
+        console.log(selectedReplyButtonIndex)
+
         yourReply[0] = e.target
         yourReply[0].style.color = DOMcolors.targetColor
         btnReplies.forEach(cur => {
             if (yourReply[0] !== cur) {cur.style.color = DOMcolors.defaultColor}
         })
     }
+
+
 });
 
 //function that when btn next is clicked it moves to next questions. 
 //Figure out which array index was chosen as reply to specific portait image
 //make dice total the data
 document.querySelector(DOMstrings.btnNexTDOM).addEventListener('click', () => {
+
     console.log(wholeQuestionReplies)
 })
 
