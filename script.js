@@ -122,7 +122,7 @@ document.getElementById(DOMstrings.IDreplyDivDOM).addEventListener('click', (e) 
         yourReply[0] = e.target;
         yourReply[0].style.color = DOMcolors.targetColor;
         btnReplies.forEach(cur => {
-            if (yourReply[0] !== cur) {cur.style.color = DOMcolors.defaultColor}
+            if (yourReply[0] !== cur) {cur.style.color = DOMcolors.defaultColor};
         });
     };
 });
@@ -131,13 +131,10 @@ document.getElementById(DOMstrings.IDreplyDivDOM).addEventListener('click', (e) 
 //Figure out which array index was chosen as reply to specific portait image
 //make dice total the data
 document.querySelector(DOMstrings.btnNexTDOM).addEventListener('click', () => {
-    console.log(diceTotal)
-    console.log(selectedReplyButtonIndex)
+
     let imgReply = document.querySelector(DOMstrings.imgReplyDOM);
     imgReply.style.display = 'block';
-    imgReply.src = 'img-replies/img-reply-' + diceTotal + '/reply-' + [selectedReplyButtonIndex + 1] + '.png'
-    console.log(wholeQuestionReplies)
-
+    imgReply.src = 'img-replies/img-reply-' + diceTotal + '/reply-' + [selectedReplyButtonIndex + 1] + '.png';
 })
 
 //callsback the init/reset function
@@ -151,7 +148,7 @@ function init() {
     innocentsKilled = 0;
     karma = 0;
     food = 0;
-    yourReply = []
+    yourReply = [];
 
     document.querySelector(DOMstrings.diceOutputDOM).textContent = 'Dice Roll:';
     document.querySelector(DOMstrings.diceTotalDOM).textContent = `Dice Total/GamePath: ${diceTotal}`;
