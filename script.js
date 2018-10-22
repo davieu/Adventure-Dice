@@ -129,7 +129,7 @@ document.getElementById(DOMstrings.IDreplyDivDOM).addEventListener('click', (e) 
 
 //function that when btn next is clicked it moves to next questions. 
 //Figure out which array index was chosen as reply to specific portait image
-//make dice total the data
+//make dice total the data. need to figure out what data i need need to show in the dom
 document.querySelector(DOMstrings.btnNexTDOM).addEventListener('click', () => {
 
     let imgReply = document.querySelector(DOMstrings.imgReplyDOM);
