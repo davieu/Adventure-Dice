@@ -9,7 +9,6 @@ let imgReplyScreen = false;
 //this is a global array so that current question can be pushed into it
 let wholeQuestionReplies = [];
 
-
 let DOMstrings = {
     btnRollDOM: '.btn-roll',
     btnReset: '.btn-reset',
@@ -24,6 +23,8 @@ let DOMstrings = {
     imgReplyDOM: '.img-reply',
     diceDisplayDOM: '.dice-display',
     gamepathDisplayDOM: '.gamepath-display',
+    repliedScreenDOM: '.replied-screen',
+    replyReactionDOM: '.reply-reaction',
     IDreplyDivDOM: 'reply-div'
 }
 
@@ -49,16 +50,17 @@ let gamePath =
 
 let gameReplies = 
 {
-    replies1: [],
-    replies2: [],
-    replies3: [],
-    replies4: [],
-    replies6: [],
-    replies7: [],
-    replies8: [],
-    replies9: [],
-    replies10: [],
-    replies11: []
+    replies1: ['You hunted and acquired some food', 'You slapped your mother then she gave you a spanking', 'your workout gave you +1 strength!'],
+    replies2: ['You hunted and acquired some food', 'Before you was able to kick the homeless man you was ambushed by a mob of thugs', 'You found a sign looking for work polishing shoes and then you gained 5 gold'],
+    replies3: ['you gave the poor kid whom was a actually a small dwarf food then he ran', 'You let the small kid starve but after further inspecting the corpse he was actually a small dwarf', 'You spit on the little kid and jabbed him with a sword. Karma deducted for your terrible deed.'],
+    replies4: ['you gave the poor kid whom was a actually a small dwarf food then he ran', 'You let the small kid starve but after further inspecting the corpse he was actually a small dwarf', 'You spit on the little kid and jabbed him with a sword. Karma deducted for your terrible deed.'],
+    replies5: ['you gave the poor kid whom was a actually a small dwarf food then he ran', 'You let the small kid starve but after further inspecting the corpse he was actually a small dwarf', 'You spit on the little kid and jabbed him with a sword. Karma deducted for your terrible deed.'],
+    replies6: ['You hunted and acquired some food', 'Before you was able to kick the homeless man you was ambushed by a mob of thugs', 'You found a sign looking for work polishing shoes and then you gained 5 gold'],
+    replies7: ['You hunted and acquired some food', 'Before you was able to kick the homeless man you was ambushed by a mob of thugs', 'You found a sign looking for work polishing shoes and then you gained 5 gold'],
+    replies8: ['You hunted and acquired some food', 'Before you was able to kick the homeless man you was ambushed by a mob of thugs', 'You found a sign looking for work polishing shoes and then you gained 5 gold'],
+    replies9: ['you gave the poor kid whom was a actually a small dwarf food then he ran', 'You let the small kid starve but after further inspecting the corpse he was actually a small dwarf', 'You spit on the little kid and jabbed him with a sword. Karma deducted for your terrible deed.'],
+    replies10: ['You hunted and acquired some food', 'Before you was able to kick the homeless man you was ambushed by a mob of thugs', 'You found a sign looking for work polishing shoes and then you gained 5 gold'],
+    replies11: ['You hunted and acquired some food', 'Before you was able to kick the homeless man you was ambushed by a mob of thugs', 'You found a sign looking for work polishing shoes and then you gained 5 gold']
 }
 
 //gets the length of the object
@@ -79,8 +81,12 @@ let diceRelatedArr = Array.from(diceRelatedNodes);
 let questionDivNodes = document.querySelectorAll(DOMstrings.questionsDivDOM);
 let questionDivArr = Array.from(questionDivNodes);
 
+//these are anything related to gamepath aside from the dice total/gamepath number
 let gamepathDisplayNodes = document.querySelectorAll(DOMstrings.gamepathDisplayDOM);
 let gamepathDisplayArr = Array.from(gamepathDisplayNodes);
+
+let repliedScreenNodes = document.querySelectorAll(DOMstrings.repliedScreenDOM);
+let repliedScreenArr = Array.from(repliedScreenNodes);
 
 
 init()
@@ -101,18 +107,16 @@ document.querySelector(DOMstrings.btnRollDOM).addEventListener('click', () => {
 
         imgReplyScreen = false;
 
-        yo();
+        screenTransitioning();
 
         document.querySelector(DOMstrings.diceTotalDOM).textContent = `Dice Total/GamePath: ${diceTotal}`;
     
         //deals with dice images using type coercion- based on diceTotal
         let diceImg = document.querySelector(DOMstrings.diceDOM);
-        // diceImg.style.display = 'block';
         diceImg.src = `img-dice/dice-${dice}.png`;
     
         //deals with background images using type coercion- based on diceTotal
         let gamePic = document.querySelector(DOMstrings.gamePathDOM);
-        gamePic.style.display = 'block'
         gamePic.src = 'gamePics/gamePic-' + gamePath['path' + diceTotal][0] + '.png'
         
         //targeting gamepath object so that it is equal to a global current questions array.
@@ -150,7 +154,6 @@ document.getElementById(DOMstrings.IDreplyDivDOM).addEventListener('click', (e) 
     };
 });
 
-//function that when btn next is clicked it moves to next questions. 
 //Figure out which array index was chosen as reply to specific portait image
 //make dice total the data. need to figure out what data i need need to show in the dom
 document.querySelector(DOMstrings.btnNexTDOM).addEventListener('click', () => {
@@ -158,7 +161,9 @@ document.querySelector(DOMstrings.btnNexTDOM).addEventListener('click', () => {
         imgReplyScreen = true;
 
         // questionDiv.forEach(cur => cur.style.display = 'none')
-        yo();
+        screenTransitioning();
+
+        console.log(document.querySelector(DOMstrings.replyReactionDOM).textContent = gameReplies['replies' + diceTotal][selectedReplyButtonIndex])
     
         let imgReply = document.querySelector(DOMstrings.imgReplyDOM);
         imgReply.style.display = 'block';
@@ -180,7 +185,7 @@ function init() {
     yourReply = [];
     imgReplyScreen = false;
 
-    yo();
+    screenTransitioning();
 
     document.querySelector(DOMstrings.diceOutputDOM).textContent = 'Dice Roll:';
     document.querySelector(DOMstrings.diceTotalDOM).textContent = `Dice Total/GamePath: ${diceTotal}`;
@@ -208,22 +213,31 @@ function init() {
     btnRepliesArr.forEach(cur => cur.style.color = DOMcolors.defaultColor)
 };
 
-function yo() {
+//helper function for transitioning screens from dice roll/gamepath pic to reply pic/reply. relies on imgReplyScreen boolean
+function screenTransitioning() {
     if (imgReplyScreen === false) {
-        //hides the imgreply when false
-        document.querySelector(DOMstrings.imgReplyDOM).style.display = 'none';
+        //hides anything related to repled screen
+        document.querySelector(DOMstrings.repliedScreenDOM).style.display = 'none';
         //makes anything question related visible
         questionDivArr.forEach(cur => cur.style.display = 'block')
         //makes anything dice related visible
         diceRelatedArr.forEach(cur => cur.style.display = 'block')
         //makes anything gamepath related aside from dice total/gamepath number visible.
         gamepathDisplayArr.forEach(cur => cur.style.display = 'block')
+
+        document.querySelector(DOMstrings.btnRollDOM).style.visibility = 'hidden'
+        document.querySelector(DOMstrings.btnNexTDOM).style.visibility = 'visible'
     } else {
+        //makes anything related to replied screen visible
+        document.querySelector(DOMstrings.repliedScreenDOM).style.display = 'block';
         //hides anything related to questions
         questionDivArr.forEach(cur => cur.style.display = 'none')
         //hides anything dice related visible
         diceRelatedArr.forEach(cur => cur.style.display = 'none')
         //hides anything gamepath related aside from dice total/gamepath number.
         gamepathDisplayArr.forEach(cur => cur.style.display = 'none')
+    
+        document.querySelector(DOMstrings.btnRollDOM).style.visibility = 'visible'
+        document.querySelector(DOMstrings.btnNexTDOM).style.visibility = 'hidden'
     }
-}
+};
