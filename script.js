@@ -9,13 +9,6 @@ let imgReplyScreen = false;
 //this is a global array so that current question can be pushed into it
 let wholeQuestionReplies = [];
 
-//these are the buttons for the replies in the DOM.
-let btnReplyNodes = document.querySelectorAll('.replies');
-let btnReplies = Array.from(btnReplyNodes);
-
-//these are anything related to the dice for easier transitioning
-let diceRelatedNodes = document.querySelectorAll('.dice-display')
-let diceRelated = Array.from(diceRelatedNodes)
 
 let DOMstrings = {
     btnRollDOM: '.btn-roll',
@@ -26,8 +19,11 @@ let DOMstrings = {
     diceTotalDOM: '.dice-total',
     diceDOM: '.dice',
     gamePathDOM: '.gamepath',
+    questionsDivDOM: '.questions',
     questionAskedDOM: '.question-asked', 
     imgReplyDOM: '.img-reply',
+    diceDisplayDOM: '.dice-display',
+    gamepathDisplayDOM: '.gamepath-display',
     IDreplyDivDOM: 'reply-div'
 }
 
@@ -70,11 +66,28 @@ var gamePathSize = Object.keys(gamePath).length;
 console.log('gamePathSize: ', gamePathSize);
 console.log('gamePath: ', gamePath);
 
+
+//these are the buttons for the replies in the DOM.
+let btnReplyNodes = document.querySelectorAll(DOMstrings.btnRepliesDOM);
+let btnRepliesArr = Array.from(btnReplyNodes);
+
+//these are anything related to the dice for easier transitioning
+let diceRelatedNodes = document.querySelectorAll(DOMstrings.diceDisplayDOM);
+let diceRelatedArr = Array.from(diceRelatedNodes);
+
+//these are anything related to questionsDiv for easier targeting
+let questionDivNodes = document.querySelectorAll(DOMstrings.questionsDivDOM);
+let questionDivArr = Array.from(questionDivNodes);
+
+let gamepathDisplayNodes = document.querySelectorAll(DOMstrings.gamepathDisplayDOM);
+let gamepathDisplayArr = Array.from(gamepathDisplayNodes);
+
+
 init()
 
 //targets the dice-roll button. When clicked random dice rolls and targets gamepath
 document.querySelector(DOMstrings.btnRollDOM).addEventListener('click', () => {
-    if (diceTotal < gamePathSize && yourReply.length > 0) {
+    if (diceTotal < gamePathSize && yourReply.length > 0 && imgReplyScreen === true) {
         //random dice and change the dom
         dice = Math.floor(Math.random() * 3) + 1;
         document.querySelector(DOMstrings.diceOutputDOM).textContent = `Dice Roll: ${dice}`;
@@ -86,7 +99,9 @@ document.querySelector(DOMstrings.btnRollDOM).addEventListener('click', () => {
             diceTotal = gamePathSize
         }
 
-        diceRelated.forEach(cur => cur.style.display = 'block')
+        imgReplyScreen = false;
+
+        yo();
 
         document.querySelector(DOMstrings.diceTotalDOM).textContent = `Dice Total/GamePath: ${diceTotal}`;
     
@@ -107,13 +122,14 @@ document.querySelector(DOMstrings.btnRollDOM).addEventListener('click', () => {
         document.querySelector(DOMstrings.questionAskedDOM).textContent = wholeQuestionReplies[0];
     
         //changes the Replies based on the global  current wholeQuestionReplies array
-        for (let i = 0; i < btnReplies.length; i++) {
-            btnReplies[i].textContent = wholeQuestionReplies[i + 1];
+        for (let i = 0; i < btnRepliesArr.length; i++) {
+            btnRepliesArr[i].textContent = wholeQuestionReplies[i + 1];
         };
         
         //resets the target and reply picked
         yourReply = [];
-        btnReplies.forEach(cur => cur.style.color = DOMcolors.defaultColor)
+        selectedReplyButtonIndex = undefined;
+        btnRepliesArr.forEach(cur => cur.style.color = DOMcolors.defaultColor)
     };
 });
 
@@ -123,12 +139,12 @@ document.getElementById(DOMstrings.IDreplyDivDOM).addEventListener('click', (e) 
     if (e.target !== document.getElementById(DOMstrings.IDreplyDivDOM)) {
 
         //sent to a global variable where I can acquire the index of the selected DOM reply button
-        selectedReplyButtonIndex = btnReplies.indexOf(e.target);
+        selectedReplyButtonIndex = btnRepliesArr.indexOf(e.target);
         console.log('reply index: ', selectedReplyButtonIndex);
 
         yourReply[0] = e.target;
         yourReply[0].style.color = DOMcolors.targetColor;
-        btnReplies.forEach(cur => {
+        btnRepliesArr.forEach(cur => {
             if (yourReply[0] !== cur) {cur.style.color = DOMcolors.defaultColor};
         });
     };
@@ -138,11 +154,17 @@ document.getElementById(DOMstrings.IDreplyDivDOM).addEventListener('click', (e) 
 //Figure out which array index was chosen as reply to specific portait image
 //make dice total the data. need to figure out what data i need need to show in the dom
 document.querySelector(DOMstrings.btnNexTDOM).addEventListener('click', () => {
-    imgReplyScreen === true;
-    let imgReply = document.querySelector(DOMstrings.imgReplyDOM);
-    imgReply.style.display = 'block';
-    imgReply.src = 'img-replies/img-reply-' + diceTotal + '/reply-' + [selectedReplyButtonIndex + 1] + '.png';
-})
+    if(selectedReplyButtonIndex !== undefined) {
+        imgReplyScreen = true;
+
+        // questionDiv.forEach(cur => cur.style.display = 'none')
+        yo();
+    
+        let imgReply = document.querySelector(DOMstrings.imgReplyDOM);
+        imgReply.style.display = 'block';
+        imgReply.src = 'img-replies/img-reply-' + diceTotal + '/reply-' + [selectedReplyButtonIndex + 1] + '.png';
+    };
+});
 
 //callsback the init/reset function
 document.querySelector(DOMstrings.btnReset).addEventListener('click', init);
@@ -158,10 +180,7 @@ function init() {
     yourReply = [];
     imgReplyScreen = false;
 
-    if(imgReplyScreen === false) {
-        let imgReply = document.querySelector(DOMstrings.imgReplyDOM);
-        imgReply.style.display = 'none';
-    }
+    yo();
 
     document.querySelector(DOMstrings.diceOutputDOM).textContent = 'Dice Roll:';
     document.querySelector(DOMstrings.diceTotalDOM).textContent = `Dice Total/GamePath: ${diceTotal}`;
@@ -171,9 +190,10 @@ function init() {
 
     //resets the question to gamepath 1
     document.querySelector(DOMstrings.questionAskedDOM).textContent = gamePath.path1[1][0];
+    
     //resets the replies to gamepath 1
-    for (let i = 0; i < btnReplies.length; i++) {
-        btnReplies[i].textContent = gamePath.path1[1][i + 1];
+    for (let i = 0; i < btnRepliesArr.length; i++) {
+        btnRepliesArr[i].textContent = gamePath.path1[1][i + 1];
     };
 
     //resets back to 1st gamepath pic
@@ -182,11 +202,28 @@ function init() {
     gamePic.src = 'gamePics/gamePic-' + gamePath['path' + diceTotal][0] + '.png'
 
     // hides anything related to dice
-    diceRelated.forEach(cur => cur.style.display = 'none')
-
-    //hides empty dice roll pic since dice has not been rolled yet
-    document.querySelector(DOMstrings.diceDOM).style.display = 'none';
+    diceRelatedArr.forEach(cur => cur.style.display = 'none')
 
     //sets all question replies to default color which is black. resets targeted reply
-    btnReplies.forEach(cur => cur.style.color = DOMcolors.defaultColor)
+    btnRepliesArr.forEach(cur => cur.style.color = DOMcolors.defaultColor)
 };
+
+function yo() {
+    if (imgReplyScreen === false) {
+        //hides the imgreply when false
+        document.querySelector(DOMstrings.imgReplyDOM).style.display = 'none';
+        //makes anything question related visible
+        questionDivArr.forEach(cur => cur.style.display = 'block')
+        //makes anything dice related visible
+        diceRelatedArr.forEach(cur => cur.style.display = 'block')
+        //makes anything gamepath related aside from dice total/gamepath number visible.
+        gamepathDisplayArr.forEach(cur => cur.style.display = 'block')
+    } else {
+        //hides anything related to questions
+        questionDivArr.forEach(cur => cur.style.display = 'none')
+        //hides anything dice related visible
+        diceRelatedArr.forEach(cur => cur.style.display = 'none')
+        //hides anything gamepath related aside from dice total/gamepath number.
+        gamepathDisplayArr.forEach(cur => cur.style.display = 'none')
+    }
+}
