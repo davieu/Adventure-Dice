@@ -4,13 +4,18 @@ let diceTotal = 1;
 let innocentsKilled = 0;
 let karma = 0;
 let food = 2;
+let imgReplyScreen = false;
 
 //this is a global array so that current question can be pushed into it
 let wholeQuestionReplies = [];
 
 //these are the buttons for the replies in the DOM.
-let btnArray = document.querySelectorAll('.replies');
-let btnReplies = Array.from(btnArray);
+let btnReplyNodes = document.querySelectorAll('.replies');
+let btnReplies = Array.from(btnReplyNodes);
+
+//these are anything related to the dice for easier transitioning
+let diceRelatedNodes = document.querySelectorAll('.dice-display')
+let diceRelated = Array.from(diceRelatedNodes)
 
 let DOMstrings = {
     btnRollDOM: '.btn-roll',
@@ -73,7 +78,7 @@ document.querySelector(DOMstrings.btnRollDOM).addEventListener('click', () => {
         //random dice and change the dom
         dice = Math.floor(Math.random() * 3) + 1;
         document.querySelector(DOMstrings.diceOutputDOM).textContent = `Dice Roll: ${dice}`;
-        console.log(dice)
+        console.log('dice roll: ', dice)
         
         //dicetotal will indicate which gamepath in the array you are at/question asked.
         diceTotal += dice
@@ -81,11 +86,13 @@ document.querySelector(DOMstrings.btnRollDOM).addEventListener('click', () => {
             diceTotal = gamePathSize
         }
 
+        diceRelated.forEach(cur => cur.style.display = 'block')
+
         document.querySelector(DOMstrings.diceTotalDOM).textContent = `Dice Total/GamePath: ${diceTotal}`;
     
         //deals with dice images using type coercion- based on diceTotal
         let diceImg = document.querySelector(DOMstrings.diceDOM);
-        diceImg.style.display = 'block';
+        // diceImg.style.display = 'block';
         diceImg.src = `img-dice/dice-${dice}.png`;
     
         //deals with background images using type coercion- based on diceTotal
@@ -131,7 +138,7 @@ document.getElementById(DOMstrings.IDreplyDivDOM).addEventListener('click', (e) 
 //Figure out which array index was chosen as reply to specific portait image
 //make dice total the data. need to figure out what data i need need to show in the dom
 document.querySelector(DOMstrings.btnNexTDOM).addEventListener('click', () => {
-
+    imgReplyScreen === true;
     let imgReply = document.querySelector(DOMstrings.imgReplyDOM);
     imgReply.style.display = 'block';
     imgReply.src = 'img-replies/img-reply-' + diceTotal + '/reply-' + [selectedReplyButtonIndex + 1] + '.png';
@@ -149,6 +156,12 @@ function init() {
     karma = 0;
     food = 0;
     yourReply = [];
+    imgReplyScreen = false;
+
+    if(imgReplyScreen === false) {
+        let imgReply = document.querySelector(DOMstrings.imgReplyDOM);
+        imgReply.style.display = 'none';
+    }
 
     document.querySelector(DOMstrings.diceOutputDOM).textContent = 'Dice Roll:';
     document.querySelector(DOMstrings.diceTotalDOM).textContent = `Dice Total/GamePath: ${diceTotal}`;
@@ -163,10 +176,17 @@ function init() {
         btnReplies[i].textContent = gamePath.path1[1][i + 1];
     };
 
+    //resets back to 1st gamepath pic
     let gamePic = document.querySelector(DOMstrings.gamePathDOM);
     gamePic.style.display = 'block'
     gamePic.src = 'gamePics/gamePic-' + gamePath['path' + diceTotal][0] + '.png'
 
+    // hides anything related to dice
+    diceRelated.forEach(cur => cur.style.display = 'none')
+
+    //hides empty dice roll pic since dice has not been rolled yet
     document.querySelector(DOMstrings.diceDOM).style.display = 'none';
+
+    //sets all question replies to default color which is black. resets targeted reply
     btnReplies.forEach(cur => cur.style.color = DOMcolors.defaultColor)
 };
