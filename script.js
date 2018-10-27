@@ -160,10 +160,10 @@ document.querySelector(DOMstrings.btnNexTDOM).addEventListener('click', () => {
     if(selectedReplyButtonIndex !== undefined) {
         imgReplyScreen = true;
 
-        // questionDiv.forEach(cur => cur.style.display = 'none')
         screenTransitioning();
-
-        console.log(document.querySelector(DOMstrings.replyReactionDOM).textContent = gameReplies['replies' + diceTotal][selectedReplyButtonIndex])
+        
+        //changes the textcontent of the reply reaction dom
+        document.querySelector(DOMstrings.replyReactionDOM).textContent = gameReplies['replies' + diceTotal][selectedReplyButtonIndex]
     
         let imgReply = document.querySelector(DOMstrings.imgReplyDOM);
         imgReply.style.display = 'block';
@@ -203,14 +203,14 @@ function init() {
 
     //resets back to 1st gamepath pic
     let gamePic = document.querySelector(DOMstrings.gamePathDOM);
-    gamePic.style.display = 'block'
-    gamePic.src = 'gamePics/gamePic-' + gamePath['path' + diceTotal][0] + '.png'
+    gamePic.style.display = 'block';
+    gamePic.src = 'gamePics/gamePic-' + gamePath['path' + diceTotal][0] + '.png';
 
     // hides anything related to dice
-    diceRelatedArr.forEach(cur => cur.style.display = 'none')
+    diceRelatedArr.forEach(cur => cur.style.display = 'none');
 
     //sets all question replies to default color which is black. resets targeted reply
-    btnRepliesArr.forEach(cur => cur.style.color = DOMcolors.defaultColor)
+    btnRepliesArr.forEach(cur => cur.style.color = DOMcolors.defaultColor);
 };
 
 //helper function for transitioning screens from dice roll/gamepath pic to reply pic/reply. relies on imgReplyScreen boolean
