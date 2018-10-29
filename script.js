@@ -68,7 +68,9 @@ var gamePathSize = Object.keys(gamePath).length;
 console.log('gamePathSize: ', gamePathSize);
 console.log('gamePath: ', gamePath);
 
-
+/************************************************
+ * DOM NODES converted to arrays. So that I can easily grab sections of the DOM that are related.
+ */
 //these are the buttons for the replies in the DOM.
 let btnReplyNodes = document.querySelectorAll(DOMstrings.btnRepliesDOM);
 let btnRepliesArr = Array.from(btnReplyNodes);
@@ -166,12 +168,11 @@ document.querySelector(DOMstrings.btnNexTDOM).addEventListener('click', () => {
         document.querySelector(DOMstrings.replyReactionDOM).textContent = gameReplies['replies' + diceTotal][selectedReplyButtonIndex]
     
         let imgReply = document.querySelector(DOMstrings.imgReplyDOM);
-        imgReply.style.display = 'block';
         imgReply.src = 'img-replies/img-reply-' + diceTotal + '/reply-' + [selectedReplyButtonIndex + 1] + '.png';
     };
 });
 
-//callsback the init/reset function
+//callback the init/reset function
 document.querySelector(DOMstrings.btnReset).addEventListener('click', init);
 
 
@@ -215,6 +216,7 @@ function init() {
 
 //helper function for transitioning screens from dice roll/gamepath pic to reply pic/reply. relies on imgReplyScreen boolean
 function screenTransitioning() {
+    //if the screen is not on the reply reaction screen than this will run.
     if (imgReplyScreen === false) {
         //hides anything related to repled screen
         document.querySelector(DOMstrings.repliedScreenDOM).style.display = 'none';
