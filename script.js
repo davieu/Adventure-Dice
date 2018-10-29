@@ -245,6 +245,7 @@ function screenTransitioning() {
 
         gameStartedScreensArr.forEach(cur => cur.style.display = 'block');
         gameMenuArr.forEach(cur => cur.style.display = 'none');
+
         //hides anything related to repled screen
         document.querySelector(DOMgameStartedStrings.repliedScreenDOM).style.display = 'none';
         //makes anything question related visible
@@ -254,11 +255,13 @@ function screenTransitioning() {
         //makes anything gamepath related aside from dice total/gamepath number visible.
         gamepathDisplayArr.forEach(cur => cur.style.display = 'block');
 
-        document.querySelector(DOMgameStartedStrings.btnRollDOM).style.visibility = 'hidden';
-        document.querySelector(DOMgameStartedStrings.btnNexTDOM).style.visibility = 'visible';
+        document.querySelector(DOMgameStartedStrings.btnRollDOM).style.display = 'none';
+        document.querySelector(DOMgameStartedStrings.btnNexTDOM).style.display = 'inline';
     } else if (imgReplyScreen === true && gameStarted === true) {
+
         gameStartedScreensArr.forEach(cur => cur.style.display = 'block');
         gameMenuArr.forEach(cur => cur.style.display = 'none');
+
         //makes anything related to replied screen visible
         document.querySelector(DOMgameStartedStrings.repliedScreenDOM).style.display = 'block';;
         //hides anything related to questions
@@ -268,7 +271,7 @@ function screenTransitioning() {
         //hides anything gamepath related aside from dice total/gamepath number.
         gamepathDisplayArr.forEach(cur => cur.style.display = 'none');
     
-        document.querySelector(DOMgameStartedStrings.btnRollDOM).style.visibility = 'visible';
-        document.querySelector(DOMgameStartedStrings.btnNexTDOM).style.visibility = 'hidden';
+        document.querySelector(DOMgameStartedStrings.btnRollDOM).style.display = 'inline';
+        document.querySelector(DOMgameStartedStrings.btnNexTDOM).style.display = 'none';
     };
 };
