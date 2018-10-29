@@ -5,13 +5,23 @@ let innocentsKilled = 0;
 let karma = 0;
 let food = 2;
 let imgReplyScreen = false;
+let gameStarted = false;
 
 //this is a global array so that current question can be pushed into it
 let wholeQuestionReplies = [];
 
-let DOMstrings = {
+let DOMmenuStrings = {
+    gameMenuDOM: '.game-menu',
+    btnStartGameDOM: '.btn-start-game',
+    btnSettingsDOM: '.btn-settings',
+    btnExtrasDOM: '.btn-Extras',
+    btnCreditsDOM: '.btn-credits'
+}
+
+let DOMgameStartedStrings = {
+    gameStartedScreensDOM: '.game-started-screens',
     btnRollDOM: '.btn-roll',
-    btnReset: '.btn-reset',
+    btnResetDOM: '.btn-reset',
     btnRepliesDOM: '.replies',
     btnNexTDOM: '.btn-next',
     diceOutputDOM: '.dice-output',
@@ -72,33 +82,39 @@ console.log('gamePath: ', gamePath);
  * DOM NODES converted to arrays. So that I can easily grab sections of the DOM that are related.
  */
 //these are the buttons for the replies in the DOM.
-let btnReplyNodes = document.querySelectorAll(DOMstrings.btnRepliesDOM);
+let btnReplyNodes = document.querySelectorAll(DOMgameStartedStrings.btnRepliesDOM);
 let btnRepliesArr = Array.from(btnReplyNodes);
 
 //these are anything related to the dice for easier transitioning
-let diceRelatedNodes = document.querySelectorAll(DOMstrings.diceDisplayDOM);
+let diceRelatedNodes = document.querySelectorAll(DOMgameStartedStrings.diceDisplayDOM);
 let diceRelatedArr = Array.from(diceRelatedNodes);
 
 //these are anything related to questionsDiv for easier targeting
-let questionDivNodes = document.querySelectorAll(DOMstrings.questionsDivDOM);
+let questionDivNodes = document.querySelectorAll(DOMgameStartedStrings.questionsDivDOM);
 let questionDivArr = Array.from(questionDivNodes);
 
 //these are anything related to gamepath aside from the dice total/gamepath number
-let gamepathDisplayNodes = document.querySelectorAll(DOMstrings.gamepathDisplayDOM);
+let gamepathDisplayNodes = document.querySelectorAll(DOMgameStartedStrings.gamepathDisplayDOM);
 let gamepathDisplayArr = Array.from(gamepathDisplayNodes);
 
-let repliedScreenNodes = document.querySelectorAll(DOMstrings.repliedScreenDOM);
+let repliedScreenNodes = document.querySelectorAll(DOMgameStartedStrings.repliedScreenDOM);
 let repliedScreenArr = Array.from(repliedScreenNodes);
+
+let gameStartedScreensNodes = document.querySelectorAll(DOMgameStartedStrings.gameStartedScreensDOM);
+let gameStartedScreensArr = Array.from(gameStartedScreensNodes);
+
+let gameMenuNodes = document.querySelectorAll(DOMmenuStrings.gameMenuDOM);
+let gameMenuArr = Array.from(gameMenuNodes)
 
 
 init()
 
 //targets the dice-roll button. When clicked random dice rolls and targets gamepath
-document.querySelector(DOMstrings.btnRollDOM).addEventListener('click', () => {
+document.querySelector(DOMgameStartedStrings.btnRollDOM).addEventListener('click', () => {
     if (diceTotal < gamePathSize && yourReply.length > 0 && imgReplyScreen === true) {
         //random dice and change the dom
         dice = Math.floor(Math.random() * 3) + 1;
-        document.querySelector(DOMstrings.diceOutputDOM).textContent = `Dice Roll: ${dice}`;
+        document.querySelector(DOMgameStartedStrings.diceOutputDOM).textContent = `Dice Roll: ${dice}`;
         console.log('dice roll: ', dice)
         
         //dicetotal will indicate which gamepath in the array you are at/question asked.
@@ -111,21 +127,21 @@ document.querySelector(DOMstrings.btnRollDOM).addEventListener('click', () => {
 
         screenTransitioning();
 
-        document.querySelector(DOMstrings.diceTotalDOM).textContent = `Dice Total/GamePath: ${diceTotal}`;
+        document.querySelector(DOMgameStartedStrings.diceTotalDOM).textContent = `Dice Total/GamePath: ${diceTotal}`;
     
         //deals with dice images using type coercion- based on diceTotal
-        let diceImg = document.querySelector(DOMstrings.diceDOM);
+        let diceImg = document.querySelector(DOMgameStartedStrings.diceDOM);
         diceImg.src = `img-dice/dice-${dice}.png`;
     
         //deals with background images using type coercion- based on diceTotal
-        let gamePic = document.querySelector(DOMstrings.gamePathDOM);
+        let gamePic = document.querySelector(DOMgameStartedStrings.gamePathDOM);
         gamePic.src = 'gamePics/gamePic-' + gamePath['path' + diceTotal][0] + '.png'
         
         //targeting gamepath object so that it is equal to a global current questions array.
         wholeQuestionReplies = gamePath['path' + diceTotal][1];
     
         //puts the question asked in the DOM
-        document.querySelector(DOMstrings.questionAskedDOM).textContent = wholeQuestionReplies[0];
+        document.querySelector(DOMgameStartedStrings.questionAskedDOM).textContent = wholeQuestionReplies[0];
     
         //changes the Replies based on the global  current wholeQuestionReplies array
         for (let i = 0; i < btnRepliesArr.length; i++) {
@@ -140,9 +156,9 @@ document.querySelector(DOMstrings.btnRollDOM).addEventListener('click', () => {
 });
 
 //This was by far the trickiest to get to work. Basically a focus for the target reply chosen.
-document.getElementById(DOMstrings.IDreplyDivDOM).addEventListener('click', (e) => {
+document.getElementById(DOMgameStartedStrings.IDreplyDivDOM).addEventListener('click', (e) => {
 
-    if (e.target !== document.getElementById(DOMstrings.IDreplyDivDOM)) {
+    if (e.target !== document.getElementById(DOMgameStartedStrings.IDreplyDivDOM)) {
 
         //sent to a global variable where I can acquire the index of the selected DOM reply button
         selectedReplyButtonIndex = btnRepliesArr.indexOf(e.target);
@@ -158,23 +174,29 @@ document.getElementById(DOMstrings.IDreplyDivDOM).addEventListener('click', (e) 
 
 //Figure out which array index was chosen as reply to specific portait image
 //make dice total the data. need to figure out what data i need need to show in the dom
-document.querySelector(DOMstrings.btnNexTDOM).addEventListener('click', () => {
+document.querySelector(DOMgameStartedStrings.btnNexTDOM).addEventListener('click', () => {
     if(selectedReplyButtonIndex !== undefined) {
         imgReplyScreen = true;
 
         screenTransitioning();
         
         //changes the textcontent of the reply reaction dom
-        document.querySelector(DOMstrings.replyReactionDOM).textContent = gameReplies['replies' + diceTotal][selectedReplyButtonIndex]
+        document.querySelector(DOMgameStartedStrings.replyReactionDOM).textContent = gameReplies['replies' + diceTotal][selectedReplyButtonIndex]
     
-        let imgReply = document.querySelector(DOMstrings.imgReplyDOM);
+        let imgReply = document.querySelector(DOMgameStartedStrings.imgReplyDOM);
         imgReply.src = 'img-replies/img-reply-' + diceTotal + '/reply-' + [selectedReplyButtonIndex + 1] + '.png';
     };
 });
 
 //callback the init/reset function
-document.querySelector(DOMstrings.btnReset).addEventListener('click', init);
+document.querySelector(DOMgameStartedStrings.btnResetDOM).addEventListener('click', init);
+document.querySelector(DOMmenuStrings.btnStartGameDOM).addEventListener('click', startTheGame);
 
+//This will start the game by setting gamestarted boolean to true and running init function. This function is used in a callback.
+function startTheGame() {
+    gameStarted = true;
+    init()
+}
 
 //resets game completely
 function init() {
@@ -188,14 +210,14 @@ function init() {
 
     screenTransitioning();
 
-    document.querySelector(DOMstrings.diceOutputDOM).textContent = 'Dice Roll:';
-    document.querySelector(DOMstrings.diceTotalDOM).textContent = `Dice Total/GamePath: ${diceTotal}`;
+    document.querySelector(DOMgameStartedStrings.diceOutputDOM).textContent = 'Dice Roll:';
+    document.querySelector(DOMgameStartedStrings.diceTotalDOM).textContent = `Dice Total/GamePath: ${diceTotal}`;
 
     //make the wholeQuestionReplies array equal to the current question/answers
     wholeQuestionReplies = gamePath['path' + diceTotal][1];
 
     //resets the question to gamepath 1
-    document.querySelector(DOMstrings.questionAskedDOM).textContent = gamePath.path1[1][0];
+    document.querySelector(DOMgameStartedStrings.questionAskedDOM).textContent = gamePath.path1[1][0];
     
     //resets the replies to gamepath 1
     for (let i = 0; i < btnRepliesArr.length; i++) {
@@ -203,7 +225,7 @@ function init() {
     };
 
     //resets back to 1st gamepath pic
-    let gamePic = document.querySelector(DOMstrings.gamePathDOM);
+    let gamePic = document.querySelector(DOMgameStartedStrings.gamePathDOM);
     gamePic.style.display = 'block';
     gamePic.src = 'gamePics/gamePic-' + gamePath['path' + diceTotal][0] + '.png';
 
@@ -217,9 +239,14 @@ function init() {
 //helper function for transitioning screens from dice roll/gamepath pic to reply pic/reply. relies on imgReplyScreen boolean
 function screenTransitioning() {
     //if the screen is not on the reply reaction screen than this will run.
-    if (imgReplyScreen === false) {
+    if  (gameStarted === false) {
+        gameStartedScreensArr.forEach(cur => cur.style.display = 'none');
+    } else if (imgReplyScreen === false && gameStarted === true) {
+
+        gameStartedScreensArr.forEach(cur => cur.style.display = 'block');
+        gameMenuArr.forEach(cur => cur.style.display = 'none');
         //hides anything related to repled screen
-        document.querySelector(DOMstrings.repliedScreenDOM).style.display = 'none';
+        document.querySelector(DOMgameStartedStrings.repliedScreenDOM).style.display = 'none';
         //makes anything question related visible
         questionDivArr.forEach(cur => cur.style.display = 'block');
         //makes anything dice related visible
@@ -227,11 +254,13 @@ function screenTransitioning() {
         //makes anything gamepath related aside from dice total/gamepath number visible.
         gamepathDisplayArr.forEach(cur => cur.style.display = 'block');
 
-        document.querySelector(DOMstrings.btnRollDOM).style.visibility = 'hidden';
-        document.querySelector(DOMstrings.btnNexTDOM).style.visibility = 'visible';
-    } else {
+        document.querySelector(DOMgameStartedStrings.btnRollDOM).style.visibility = 'hidden';
+        document.querySelector(DOMgameStartedStrings.btnNexTDOM).style.visibility = 'visible';
+    } else if (imgReplyScreen === true && gameStarted === true) {
+        gameStartedScreensArr.forEach(cur => cur.style.display = 'block');
+        gameMenuArr.forEach(cur => cur.style.display = 'none');
         //makes anything related to replied screen visible
-        document.querySelector(DOMstrings.repliedScreenDOM).style.display = 'block';;
+        document.querySelector(DOMgameStartedStrings.repliedScreenDOM).style.display = 'block';;
         //hides anything related to questions
         questionDivArr.forEach(cur => cur.style.display = 'none');
         //hides anything dice related visible
@@ -239,7 +268,7 @@ function screenTransitioning() {
         //hides anything gamepath related aside from dice total/gamepath number.
         gamepathDisplayArr.forEach(cur => cur.style.display = 'none');
     
-        document.querySelector(DOMstrings.btnRollDOM).style.visibility = 'visible';
-        document.querySelector(DOMstrings.btnNexTDOM).style.visibility = 'hidden';
+        document.querySelector(DOMgameStartedStrings.btnRollDOM).style.visibility = 'visible';
+        document.querySelector(DOMgameStartedStrings.btnNexTDOM).style.visibility = 'hidden';
     };
 };
