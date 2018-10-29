@@ -104,8 +104,8 @@ document.querySelector(DOMstrings.btnRollDOM).addEventListener('click', () => {
         //dicetotal will indicate which gamepath in the array you are at/question asked.
         diceTotal += dice
         if (diceTotal > gamePathSize) {
-            diceTotal = gamePathSize
-        }
+            diceTotal = gamePathSize;
+        };
 
         imgReplyScreen = false;
 
@@ -132,10 +132,10 @@ document.querySelector(DOMstrings.btnRollDOM).addEventListener('click', () => {
             btnRepliesArr[i].textContent = wholeQuestionReplies[i + 1];
         };
         
-        //resets the target and reply picked
+        //resets the target, reply picked, and sets colors of replies to default
         yourReply = [];
         selectedReplyButtonIndex = undefined;
-        btnRepliesArr.forEach(cur => cur.style.color = DOMcolors.defaultColor)
+        btnRepliesArr.forEach(cur => cur.style.color = DOMcolors.defaultColor);
     };
 });
 
@@ -221,25 +221,25 @@ function screenTransitioning() {
         //hides anything related to repled screen
         document.querySelector(DOMstrings.repliedScreenDOM).style.display = 'none';
         //makes anything question related visible
-        questionDivArr.forEach(cur => cur.style.display = 'block')
+        questionDivArr.forEach(cur => cur.style.display = 'block');
         //makes anything dice related visible
-        diceRelatedArr.forEach(cur => cur.style.display = 'block')
+        diceRelatedArr.forEach(cur => cur.style.display = 'block');
         //makes anything gamepath related aside from dice total/gamepath number visible.
-        gamepathDisplayArr.forEach(cur => cur.style.display = 'block')
+        gamepathDisplayArr.forEach(cur => cur.style.display = 'block');
 
-        document.querySelector(DOMstrings.btnRollDOM).style.visibility = 'hidden'
-        document.querySelector(DOMstrings.btnNexTDOM).style.visibility = 'visible'
+        document.querySelector(DOMstrings.btnRollDOM).style.visibility = 'hidden';
+        document.querySelector(DOMstrings.btnNexTDOM).style.visibility = 'visible';
     } else {
         //makes anything related to replied screen visible
-        document.querySelector(DOMstrings.repliedScreenDOM).style.display = 'block';
+        document.querySelector(DOMstrings.repliedScreenDOM).style.display = 'block';;
         //hides anything related to questions
-        questionDivArr.forEach(cur => cur.style.display = 'none')
+        questionDivArr.forEach(cur => cur.style.display = 'none');
         //hides anything dice related visible
-        diceRelatedArr.forEach(cur => cur.style.display = 'none')
+        diceRelatedArr.forEach(cur => cur.style.display = 'none');
         //hides anything gamepath related aside from dice total/gamepath number.
-        gamepathDisplayArr.forEach(cur => cur.style.display = 'none')
+        gamepathDisplayArr.forEach(cur => cur.style.display = 'none');
     
-        document.querySelector(DOMstrings.btnRollDOM).style.visibility = 'visible'
-        document.querySelector(DOMstrings.btnNexTDOM).style.visibility = 'hidden'
-    }
+        document.querySelector(DOMstrings.btnRollDOM).style.visibility = 'visible';
+        document.querySelector(DOMstrings.btnNexTDOM).style.visibility = 'hidden';
+    };
 };
