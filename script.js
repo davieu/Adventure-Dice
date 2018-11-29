@@ -172,6 +172,7 @@ document.getElementById(DOMgameStartedStrings.IDreplyDivDOM).addEventListener('c
     };
 });
 
+//test
 //Figure out which array index was chosen as reply to specific portait image
 //make dice total the data. need to figure out what data i need need to show in the dom
 document.querySelector(DOMgameStartedStrings.btnNexTDOM).addEventListener('click', () => {
